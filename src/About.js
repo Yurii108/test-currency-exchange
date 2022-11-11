@@ -1,9 +1,9 @@
 
-
 const About = () => {
     return (
-        
-        <h1>About page</h1>
+        <>
+            <h2 style={{ marginTop: '40px', textAlign: 'center' }}>About</h2>
+        </>
     )
 }
 

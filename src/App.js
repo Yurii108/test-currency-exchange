@@ -1,4 +1,3 @@
-import './App.css';
 import NaviBar from './Components/NaviBar';
 
 
