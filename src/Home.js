@@ -28,13 +28,23 @@ const Home = () => {
     //     });
     // });
 
+
+    const [selectOne, setSelectOne] = useState(0);
+    const [selectTwo, setSelectTwo] = useState(0);
+
     const [data, setData] = useState([]);
+    // const [dataC, setCData] = useState();
+
+    // setCData([uk, data[25], data[32], data[33], data[24], data[12], data[18], data[9], data[4]]);
+
     const [leftInput, setLeftInput] = useState(0);
 
     const onValueChange = (e) => {
         setLeftInput(e.target.value);
         console.log(leftInput);
     }
+
+
 
     useEffect(() => {
         let urlCourses = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json'
@@ -44,21 +54,60 @@ const Home = () => {
 
             return await res.json();
         }
-        getResource(urlCourses).then(res => setData(res));
+        getResource(urlCourses).then(data => setData(data));
     }, []);
 
+    // const uk = {
+    //     "r030": 1244, "txt": "Українська гривня", "rate": 1, "cc": "UAH", "exchangedate": "14.11.2022"
+    // };
+
+    const writeChoosedSelectOne = (e) => {
+        if (e.target.value) {
+            setSelectOne(e.target.value)
+            console.log(selectOne)  
+        }
+    }
+
+    const writeChoosedSelectTwo = (e) => {
+        if (e.target.value) {
+        setSelectTwo(e.target.value)
+        console.log(selectTwo)  
+        }
+    }
+   
+
+
+    const macthSum = (selectOne, inputOne, selectTwo) => {
+        let sum = (selectOne * inputOne) / selectTwo
+
+        return sum;
+    }
+
+    // const macthSumTwoInput = (selectTwo, inputTwo, selectOne) => {
+    //     let sum = (selectTwo * inputTwo) / selectOne
+
+    //     return sum;
+    // }
+
+
     const inputCurrency = (url) => {
-        const data = url.map((item, i) => {
-            // `${item.cc}   ${item.txt}   ${item.rate}`
+        // const choosen = [url[25], url[32], url[33],
+        // url[24], url[12], url[18], url[9], url[4]];
+
+
+        const data = url.map((item) => {
+
             return (
                 <>
-                    <option value={item.rate}>{item.txt}:  {item.cc}  {item.rate}</option>
+                    <option
+                        key={item.r030}
+                        value={item.rate}>{`${item.txt}:  ${item.cc}  ${item.rate}`}
+                    </option>
                 </>
             )
         })
         return data;
     }
-
 
 
     return (
@@ -81,9 +130,13 @@ const Home = () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Disabled select menu</Form.Label>
-                            <Form.Select 
-                            value={leftInput}
-                            onChange={onValueChange}>
+                            <Form.Select
+                                // value={writeChoosedSelectOne}
+                                onChange={writeChoosedSelectOne}>
+                                <option
+                                    key={12322}
+                                    value={"1"}>Українська гривня: UAH
+                                </option>
                                 {inputCurrency(data)}
                             </Form.Select>
                         </Form.Group>
@@ -97,11 +150,18 @@ const Home = () => {
                             <Form.Control
                                 type="number"
                                 placeholder="0.00"
-                                value={leftInput} />
+                                value={macthSum(selectOne, leftInput, selectTwo)} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Disabled select menu</Form.Label>
-                            <Form.Select>
+                            <Form.Select
+                            // value={writeChoosedSelectTwo}
+                            onChange={writeChoosedSelectTwo}
+                            >
+                                <option
+                                    key={12322}
+                                    value={'1'}>Українська гривня: UAH
+                                </option>
                                 {inputCurrency(data)}
                             </Form.Select>
                         </Form.Group>
@@ -111,5 +171,29 @@ const Home = () => {
         </>
     )
 }
+
+// const FormCorrency = () => {
+
+//     return (
+//         <>
+//             <Form.Group className="mb-3">
+//                 <Form.Label>Disabled input</Form.Label>
+//                 <Form.Control
+//                     type="number"
+//                     placeholder="0.00"
+//                     onChange={onValueChange} />
+//             </Form.Group>
+//             <Form.Group className="mb-3">
+//                 <Form.Label>Disabled select menu</Form.Label>
+//                 <Form.Select
+//                     value={leftInput}
+//                     onChange={onValueChange}>
+//                     {inputCurrency(data)}
+//                 </Form.Select>
+//             </Form.Group>
+//         </>
+//     )
+
+// }
 
 export default Home;
