@@ -9,9 +9,14 @@ import ArrowsSvg from './ArrowsSvg';
 
 const Home = () => {
 
-    const [selectOne, setSelectOne] = useState(0);
-    const [selectTwo, setSelectTwo] = useState(0);
-    const [turnOfRightInput, setTurnOfRightInput] = useState(false);
+    const natureCurrency = {
+        "r030": 1244, "txt": "Українська гривня", "rate": 1, "cc": "UAH",
+        "exchangedate": "14.11.2022"
+    };
+
+    const [selectOne, setSelectOne] = useState(1);
+    const [selectTwo, setSelectTwo] = useState(1);
+    const [turnOfRightInput, setTurnOfRightInput] = useState(true);
     const [turnOfLiftInput, setTurnOfLiftInput] = useState(false);
 
     const [data, setData] = useState([]);
@@ -23,14 +28,12 @@ const Home = () => {
         setLeftInput(e.target.value);
         setTurnOfRightInput(true)
         setTurnOfLiftInput(false)
-        console.log(leftInput);
     }
 
     const onValueChangeR = (e) => {
         setRightInput(e.target.value);
         setTurnOfRightInput(false)
         setTurnOfLiftInput(true)
-        console.log(rightInput);
     }
 
     useEffect(() => {
@@ -44,45 +47,24 @@ const Home = () => {
         getResource(urlCourses).then(data => setData(data));
     }, []);
 
-    // const uk = {
-    //     "r030": 1244, "txt": "Українська гривня", "rate": 1, "cc": "UAH", "exchangedate": "14.11.2022"
-    // };
-
     const writeChoosedSelectOne = (e) => {
-        if (e.target.value) {
-            setSelectOne(e.target.value)
-            console.log(selectOne)
-        }
+        setSelectOne(e.target.value)
     }
 
     const writeChoosedSelectTwo = (e) => {
-        if (e.target.value) {
-            setSelectTwo(e.target.value)
-            console.log(selectTwo)
-        }
+        setSelectTwo(e.target.value)
     }
 
-    const macthSum = (selectOne = 1, inputOne, selectTwo = 1) => {
+    const macthSum = (selectOne = 1, inputOne = 0, selectTwo = 1) => {
         let sum = (selectOne * inputOne) / selectTwo
 
-        return sum;
+        return sum.toFixed(2);
     }
-
-    // function searchNeedCurr(arr, prop, value) {
-    //     let result = [],
-    //         copy = [...arr];
-    //     for (const item of copy) {
-    //         if (String(item[prop].includes(value) === true)) result.push(item);
-    //     }
-    //     return result;
-    // }
 
     const inputCurrency = (url) => {
 
         let listSeveralCurr = [
-            {
-                "r030": 1244, "txt": "Українська гривня", "rate": 1, "cc": "UAH", "exchangedate": "14.11.2022"
-            },
+            natureCurrency,
         ];
 
         for (let name of url) {
@@ -93,13 +75,16 @@ const Home = () => {
             if (name.cc === 'CZK') listSeveralCurr.push(name);
         }
 
-        const data = listSeveralCurr.map((item) => {
+        const data = listSeveralCurr.map((item, index) => {
 
             return (
                 <>
                     <option
-                        key={item.r030}
-                        value={item.rate}>{`${item.txt}:  ${item.cc}  ${item.rate}`}
+                        key={index}
+                        value={item.rate}> 
+                         {item.cc}&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;  
+                         {item.txt}&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 
+                         {item.rate.toFixed(2)}
                     </option>
                 </>
             )
@@ -133,6 +118,7 @@ const Home = () => {
                                 onChange={writeChoosedSelectOne}>
 
                                 {inputCurrency(data)}
+
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -157,6 +143,7 @@ const Home = () => {
                                 onChange={writeChoosedSelectTwo}
                             >
                                 {inputCurrency(data)}
+
                             </Form.Select>
                         </Form.Group>
                     </Col>

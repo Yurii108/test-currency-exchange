@@ -14,8 +14,8 @@ function App() {
       <BrowserRouter>
       <NaviBar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+          <Route key={1} path="/" element={<Home />} />
+          <Route key={2} path="/about" element={<About />} />
         </Routes>
       </BrowserRouter>
     </>
