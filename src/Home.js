@@ -5,6 +5,8 @@ import Col from 'react-bootstrap/Col';
 
 import { useEffect, useState } from "react";
 
+import ArrowsSvg from './ArrowsSvg';
+
 
 const Home = () => {
     // const inputUAH = 0,
@@ -31,6 +33,9 @@ const Home = () => {
 
     const [selectOne, setSelectOne] = useState(0);
     const [selectTwo, setSelectTwo] = useState(0);
+    const [turnOfRightInput, setTurnOfRightInput] = useState(false);
+    const [turnOfLiftInput, setTurnOfLiftInput] = useState(false);
+
 
     const [data, setData] = useState([]);
     // const [dataC, setCData] = useState();
@@ -38,10 +43,21 @@ const Home = () => {
     // setCData([uk, data[25], data[32], data[33], data[24], data[12], data[18], data[9], data[4]]);
 
     const [leftInput, setLeftInput] = useState(0);
+    const [rightInput, setRightInput] = useState(0);
+
 
     const onValueChange = (e) => {
         setLeftInput(e.target.value);
+        setTurnOfRightInput(true)
+        setTurnOfLiftInput(false)
         console.log(leftInput);
+    }
+
+    const onValueChangeR = (e) => {
+        setRightInput(e.target.value);
+        setTurnOfRightInput(false)
+        setTurnOfLiftInput(true)
+        console.log(rightInput);
     }
 
 
@@ -64,17 +80,17 @@ const Home = () => {
     const writeChoosedSelectOne = (e) => {
         if (e.target.value) {
             setSelectOne(e.target.value)
-            console.log(selectOne)  
+            console.log(selectOne)
         }
     }
 
     const writeChoosedSelectTwo = (e) => {
         if (e.target.value) {
-        setSelectTwo(e.target.value)
-        console.log(selectTwo)  
+            setSelectTwo(e.target.value)
+            console.log(selectTwo)
         }
     }
-   
+
 
 
     const macthSum = (selectOne, inputOne, selectTwo) => {
@@ -83,11 +99,11 @@ const Home = () => {
         return sum;
     }
 
-    // const macthSumTwoInput = (selectTwo, inputTwo, selectOne) => {
-    //     let sum = (selectTwo * inputTwo) / selectOne
+    const macthSumTwoInput = (selectTwo, inputTwo, selectOne) => {
+        let sum = (selectTwo * inputTwo) / selectOne
 
-    //     return sum;
-    // }
+        return sum;
+    }
 
 
     const inputCurrency = (url) => {
@@ -126,6 +142,8 @@ const Home = () => {
                             <Form.Control
                                 type="number"
                                 placeholder="0.00"
+                                value={turnOfLiftInput ?
+                                    macthSumTwoInput(selectTwo, rightInput, selectOne) : null}
                                 onChange={onValueChange} />
                         </Form.Group>
                         <Form.Group className="mb-3">
@@ -142,7 +160,9 @@ const Home = () => {
                         </Form.Group>
                     </Col>
 
-                    <Col></Col>
+                    <Col>
+                    <ArrowsSvg/>
+                    </Col>
 
                     <Col xs={5} md={5}>
                         <Form.Group className="mb-3">
@@ -150,13 +170,15 @@ const Home = () => {
                             <Form.Control
                                 type="number"
                                 placeholder="0.00"
-                                value={macthSum(selectOne, leftInput, selectTwo)} />
+                                value={turnOfRightInput ? 
+                                    macthSum(selectOne, leftInput, selectTwo) : null}
+                                onChange={onValueChangeR} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Disabled select menu</Form.Label>
                             <Form.Select
-                            // value={writeChoosedSelectTwo}
-                            onChange={writeChoosedSelectTwo}
+                                // value={writeChoosedSelectTwo}
+                                onChange={writeChoosedSelectTwo}
                             >
                                 <option
                                     key={12322}
@@ -186,8 +208,12 @@ const Home = () => {
 //             <Form.Group className="mb-3">
 //                 <Form.Label>Disabled select menu</Form.Label>
 //                 <Form.Select
-//                     value={leftInput}
-//                     onChange={onValueChange}>
+//                     // value={writeChoosedSelectOne}
+//                     onChange={writeChoosedSelectOne}>
+//                     <option
+//                         key={12322}
+//                         value={"1"}>Українська гривня: UAH
+//                     </option>
 //                     {inputCurrency(data)}
 //                 </Form.Select>
 //             </Form.Group>
