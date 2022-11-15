@@ -7,44 +7,17 @@ import { useEffect, useState } from "react";
 
 import ArrowsSvg from './ArrowsSvg';
 
-
 const Home = () => {
-    // const inputUAH = 0,
-    //     inputEUR = 0;
-
-    // inputUAH.addEventListener('input', () => {
-    //     const request = new XMLHttpRequest();
-
-    //     request.open('GET', './current.json');
-    //     request.setRequestHeader('content-type', 'application/json', 'charset = UTF-8');
-    //     request.send();
-
-    //     request.addEventListener('load', () => {
-    //         if (request.status === 200) {
-    //             console.log(request.response);
-    //             const data = JSON.parse(request.response);
-    //             inputEUR = +inputUAH * data.current.eur;
-    //         } else {
-    //             inputEUR = 'Error - Что-то случилось, попробуйте через 1 час';
-    //         }
-    //     });
-    // });
-
 
     const [selectOne, setSelectOne] = useState(0);
     const [selectTwo, setSelectTwo] = useState(0);
     const [turnOfRightInput, setTurnOfRightInput] = useState(false);
     const [turnOfLiftInput, setTurnOfLiftInput] = useState(false);
 
-
     const [data, setData] = useState([]);
-    // const [dataC, setCData] = useState();
-
-    // setCData([uk, data[25], data[32], data[33], data[24], data[12], data[18], data[9], data[4]]);
 
     const [leftInput, setLeftInput] = useState(0);
     const [rightInput, setRightInput] = useState(0);
-
 
     const onValueChange = (e) => {
         setLeftInput(e.target.value);
@@ -59,8 +32,6 @@ const Home = () => {
         setTurnOfLiftInput(true)
         console.log(rightInput);
     }
-
-
 
     useEffect(() => {
         let urlCourses = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json'
@@ -91,27 +62,38 @@ const Home = () => {
         }
     }
 
-
-
-    const macthSum = (selectOne, inputOne, selectTwo) => {
+    const macthSum = (selectOne = 1, inputOne, selectTwo = 1) => {
         let sum = (selectOne * inputOne) / selectTwo
 
         return sum;
     }
 
-    const macthSumTwoInput = (selectTwo, inputTwo, selectOne) => {
-        let sum = (selectTwo * inputTwo) / selectOne
-
-        return sum;
-    }
-
+    // function searchNeedCurr(arr, prop, value) {
+    //     let result = [],
+    //         copy = [...arr];
+    //     for (const item of copy) {
+    //         if (String(item[prop].includes(value) === true)) result.push(item);
+    //     }
+    //     return result;
+    // }
 
     const inputCurrency = (url) => {
-        // const choosen = [url[25], url[32], url[33],
-        // url[24], url[12], url[18], url[9], url[4]];
 
+        let listSeveralCurr = [
+            {
+                "r030": 1244, "txt": "Українська гривня", "rate": 1, "cc": "UAH", "exchangedate": "14.11.2022"
+            },
+        ];
 
-        const data = url.map((item) => {
+        for (let name of url) {
+            if (name.cc === 'EUR') listSeveralCurr.push(name);
+            if (name.cc === 'USD') listSeveralCurr.push(name);
+            if (name.cc === 'INR') listSeveralCurr.push(name);
+            if (name.cc === 'PLN') listSeveralCurr.push(name);
+            if (name.cc === 'CZK') listSeveralCurr.push(name);
+        }
+
+        const data = listSeveralCurr.map((item) => {
 
             return (
                 <>
@@ -125,7 +107,6 @@ const Home = () => {
         return data;
     }
 
-
     return (
         <>
             <Container>
@@ -138,52 +119,43 @@ const Home = () => {
                 <Row style={{ marginTop: '40px' }}>
                     <Col xs={5} md={5}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Disabled input</Form.Label>
+                            <Form.Label>I have</Form.Label>
                             <Form.Control
                                 type="number"
                                 placeholder="0.00"
                                 value={turnOfLiftInput ?
-                                    macthSumTwoInput(selectTwo, rightInput, selectOne) : null}
+                                    macthSum(selectTwo, rightInput, selectOne) : null}
                                 onChange={onValueChange} />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Disabled select menu</Form.Label>
+                            <Form.Label>Choose the currency</Form.Label>
                             <Form.Select
-                                // value={writeChoosedSelectOne}
                                 onChange={writeChoosedSelectOne}>
-                                <option
-                                    key={12322}
-                                    value={"1"}>Українська гривня: UAH
-                                </option>
+
                                 {inputCurrency(data)}
                             </Form.Select>
                         </Form.Group>
                     </Col>
 
                     <Col>
-                    <ArrowsSvg/>
+                        <ArrowsSvg />
                     </Col>
 
                     <Col xs={5} md={5}>
                         <Form.Group className="mb-3">
-                            <Form.Label>Disabled input</Form.Label>
+                            <Form.Label>I will have</Form.Label>
                             <Form.Control
                                 type="number"
                                 placeholder="0.00"
-                                value={turnOfRightInput ? 
+                                value={turnOfRightInput ?
                                     macthSum(selectOne, leftInput, selectTwo) : null}
                                 onChange={onValueChangeR} />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Disabled select menu</Form.Label>
+                            <Form.Label>Choose the currency</Form.Label>
                             <Form.Select
-                                // value={writeChoosedSelectTwo}
                                 onChange={writeChoosedSelectTwo}
                             >
-                                <option
-                                    key={12322}
-                                    value={'1'}>Українська гривня: UAH
-                                </option>
                                 {inputCurrency(data)}
                             </Form.Select>
                         </Form.Group>
@@ -193,33 +165,5 @@ const Home = () => {
         </>
     )
 }
-
-// const FormCorrency = () => {
-
-//     return (
-//         <>
-//             <Form.Group className="mb-3">
-//                 <Form.Label>Disabled input</Form.Label>
-//                 <Form.Control
-//                     type="number"
-//                     placeholder="0.00"
-//                     onChange={onValueChange} />
-//             </Form.Group>
-//             <Form.Group className="mb-3">
-//                 <Form.Label>Disabled select menu</Form.Label>
-//                 <Form.Select
-//                     // value={writeChoosedSelectOne}
-//                     onChange={writeChoosedSelectOne}>
-//                     <option
-//                         key={12322}
-//                         value={"1"}>Українська гривня: UAH
-//                     </option>
-//                     {inputCurrency(data)}
-//                 </Form.Select>
-//             </Form.Group>
-//         </>
-//     )
-
-// }
 
 export default Home;
