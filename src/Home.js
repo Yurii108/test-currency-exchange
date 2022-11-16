@@ -9,7 +9,7 @@ import ArrowsSvg from './ArrowsSvg';
 
 const Home = () => {
 
-    const natureCurrency = {
+    const naturalCurrency = {
         "r030": 1244, "txt": "Українська гривня", "rate": 1, "cc": "UAH",
         "exchangedate": "14.11.2022"
     };
@@ -17,7 +17,7 @@ const Home = () => {
     const [selectOne, setSelectOne] = useState(1);
     const [selectTwo, setSelectTwo] = useState(1);
     const [turnOfRightInput, setTurnOfRightInput] = useState(true);
-    const [turnOfLiftInput, setTurnOfLiftInput] = useState(false);
+    const [turnOfLeftInput, setTurnOfLeftInput] = useState(false);
 
     const [data, setData] = useState([]);
 
@@ -27,13 +27,13 @@ const Home = () => {
     const onValueChange = (e) => {
         setLeftInput(e.target.value);
         setTurnOfRightInput(true)
-        setTurnOfLiftInput(false)
+        setTurnOfLeftInput(false)
     }
 
     const onValueChangeR = (e) => {
         setRightInput(e.target.value);
         setTurnOfRightInput(false)
-        setTurnOfLiftInput(true)
+        setTurnOfLeftInput(true)
     }
 
     useEffect(() => {
@@ -64,7 +64,7 @@ const Home = () => {
     const inputCurrency = (url) => {
 
         let listSeveralCurr = [
-            natureCurrency,
+            naturalCurrency,
         ];
 
         for (let name of url) {
@@ -81,10 +81,10 @@ const Home = () => {
                 <>
                     <option
                         key={index}
-                        value={item.rate}> 
-                         {item.cc}&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;  
-                         {item.txt}&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 
-                         {item.rate.toFixed(2)}
+                        value={item.rate}>
+                        {item.cc}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {item.txt}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {item.rate.toFixed(2)}
                     </option>
                 </>
             )
@@ -108,7 +108,7 @@ const Home = () => {
                             <Form.Control
                                 type="number"
                                 placeholder="0.00"
-                                value={turnOfLiftInput ?
+                                value={turnOfLeftInput ?
                                     macthSum(selectTwo, rightInput, selectOne) : null}
                                 onChange={onValueChange} />
                         </Form.Group>
@@ -116,9 +116,7 @@ const Home = () => {
                             <Form.Label>Choose the currency</Form.Label>
                             <Form.Select
                                 onChange={writeChoosedSelectOne}>
-
                                 {inputCurrency(data)}
-
                             </Form.Select>
                         </Form.Group>
                     </Col>
@@ -140,10 +138,8 @@ const Home = () => {
                         <Form.Group className="mb-3">
                             <Form.Label>Choose the currency</Form.Label>
                             <Form.Select
-                                onChange={writeChoosedSelectTwo}
-                            >
+                                onChange={writeChoosedSelectTwo}>
                                 {inputCurrency(data)}
-
                             </Form.Select>
                         </Form.Group>
                     </Col>
